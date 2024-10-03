@@ -9,7 +9,6 @@ from utils import Dates, DataExtractor
 from data import Data_collection
 
 from utils.kb_builder import create_kb
-from data.config_reader import time_dict
 
 
 router = Router()
@@ -52,6 +51,8 @@ async def dates_func(msg: Message, state: FSMContext):
         elif msg.text == Dates.after_tomorrow_day()[0]:
             await state.update_data(dates=Dates.after_tomorrow_day()[1])
 
+        time_dict = extraktor.extract_times()
+
         await msg.answer(
             "Выберите временной период",
             reply_markup=create_kb(2, *time_dict)
@@ -66,6 +67,7 @@ async def dates_func(msg: Message, state: FSMContext):
 @router.message(StateFilter(Data_collection.another))
 async def another_date(msg: Message, state: FSMContext):
     await state.update_data(dates=msg.text)
+    time_dict = extraktor.extract_times()
 
     await msg.answer(
     "Выберите временной период",
@@ -121,7 +123,8 @@ async def times_func(msg: Message, state: FSMContext):
     await msg.answer(
         "Вы выбрали:\n"
         f"Дата: {Dates.transfomation(date_dict['dates'])}\n"
-        f"Время: {date_dict['times']}\n",
+        f"Время: {date_dict['times']}\n"
+        "Пожалуйста перешлите данное сообщение курьеру которого вы выбрали",
         reply_markup=ReplyKeyboardRemove()
         )
     

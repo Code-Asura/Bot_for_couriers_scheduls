@@ -1,8 +1,10 @@
 import pygsheets
 
+from data import config
+
 class DataExtractor:
     def __init__(self, spreadsheet_neme: str) -> None:
-        self.gc = pygsheets.authorize(service_account_file="bot/data/credentials.json")
+        self.gc = pygsheets.authorize(service_account_file=config.credentials_path.get_secret_value())
         self.sheet = self.gc.open(spreadsheet_neme)
     
     # Получение индекса столбца по заголовку
@@ -34,9 +36,16 @@ class DataExtractor:
     def _get_target_value(self, sheet, row_index: int, column_index: int):
         return sheet.cell((row_index, column_index)).value
     
+    # Получение времён
+    def extract_times(self) -> list:
+        wks = self.sheet.worksheet("title", "расписание")
+        data = wks.get_col(1, include_tailing_empty=False)
+        
+        return data
+    
     # Основной метод для извлечения данных
-    def extract_data(self, sheet_name: str, column_value: str, row_value: str) -> list:
-        sheet = self.sheet.worksheet("title", sheet_name)
+    def extract_data(self, worksheet_name: str, column_value: str, row_value: str) -> list:
+        sheet = self.sheet.worksheet("title", worksheet_name)
         column_index = self._get_column_index(sheet, column_value)
         row_index = self._get_row_index(sheet, row_value)
 

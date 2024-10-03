@@ -5,15 +5,17 @@ from aiogram.fsm.state import State, StatesGroup
 
 # Машина состояний 
 class Data_collection(StatesGroup):
-    statr = State()
     dates = State()
     times = State()
     another = State()
+    redact_text = State()
     
 
 #Класс конфигурации для подгрузки данных из .env
 class Config(BaseSettings):
     token: SecretStr
+    credentials_path: SecretStr
+    api_key: SecretStr
 
     model_config = SettingsConfigDict(env_file='bot/.env', env_file_encoding='utf-8')
 
