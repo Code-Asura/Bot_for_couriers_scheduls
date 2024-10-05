@@ -123,7 +123,7 @@ async def times_func(msg: Message, state: FSMContext):
     await msg.answer(
         "Вы выбрали:\n"
         f"Дата: {Dates.transfomation(date_dict['dates'])}\n"
-        f"Время: {date_dict['times']}\n"
+        f"Время: {date_dict['times']}\n\n"
         "Пожалуйста перешлите данное сообщение курьеру которого вы выбрали",
         reply_markup=ReplyKeyboardRemove()
         )
